@@ -1,0 +1,10 @@
+[Desktop Entry]
+Name=FairDeskURL Scheme Handler
+NoDisplay=true
+MimeType=x-scheme-handler/fairdesk;
+TryExec=fairdesk
+Exec=fairdesk %u
+Icon=fairdesk
+Terminal=false
+Type=Application
+StartupNotify=false

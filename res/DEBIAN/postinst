@@ -7,17 +7,17 @@ if [ "$1" = configure ]; then
 	INITSYS=$(ls -al /proc/1/exe | awk -F' ' '{print $NF}' | awk -F'/' '{print $NF}')
 	
 	if [ "systemd" == "$INITSYS" ]; then
-		ln -s /usr/lib/rustdesk/rustdesk /usr/bin/rustdesk
+		ln -s /usr/lib/fairdesk/fairdesk /usr/bin/fairdesk
 
-		if [ -e /etc/systemd/system/rustdesk.service ]; then
-			rm /etc/systemd/system/rustdesk.service /usr/lib/systemd/system/rustdesk.service /usr/lib/systemd/user/rustdesk.service >/dev/null  2>&1
+		if [ -e /etc/systemd/system/fairdesk.service ]; then
+			rm /etc/systemd/system/fairdesk.service /usr/lib/systemd/system/fairdesk.service /usr/lib/systemd/user/fairdesk.service >/dev/null  2>&1
 		fi
 		version=$(python3 -V 2>&1 | grep -Po '(?<=Python )(.+)')
 		parsedVersion=$(echo "${version//./}")
         mkdir -p /usr/lib/systemd/system/
-		cp /usr/share/rustdesk/files/systemd/rustdesk.service /usr/lib/systemd/system/rustdesk.service
+		cp /usr/share/fairdesk/files/systemd/fairdesk.service /usr/lib/systemd/system/fairdesk.service
 		systemctl daemon-reload
-		systemctl enable rustdesk
-		systemctl start rustdesk
+		systemctl enable fairdesk
+		systemctl start fairdesk
 	fi
 fi

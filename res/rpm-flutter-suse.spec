@@ -1,4 +1,4 @@
-Name:       rustdesk 
+Name:       fairdesk 
 Version:    1.2.2
 Release:    0
 Summary:    RPM package
@@ -19,19 +19,19 @@ The best open-source remote desktop client software, written in Rust.
 
 %install
 
-mkdir -p "%{buildroot}/usr/lib/rustdesk" && cp -r ${HBB}/flutter/build/linux/x64/release/bundle/* -t "%{buildroot}/usr/lib/rustdesk"
+mkdir -p "%{buildroot}/usr/lib/fairdesk" && cp -r ${HBB}/flutter/build/linux/x64/release/bundle/* -t "%{buildroot}/usr/lib/fairdesk"
 mkdir -p "%{buildroot}/usr/bin"
-install -Dm 644 $HBB/res/rustdesk.service -t "%{buildroot}/usr/share/rustdesk/files"
-install -Dm 644 $HBB/res/rustdesk.desktop -t "%{buildroot}/usr/share/rustdesk/files"
-install -Dm 644 $HBB/res/rustdesk-link.desktop -t "%{buildroot}/usr/share/rustdesk/files"
-install -Dm 644 $HBB/res/128x128@2x.png "%{buildroot}/usr/share/rustdesk/files/rustdesk.png"
+install -Dm 644 $HBB/res/fairdesk.service -t "%{buildroot}/usr/share/fairdesk/files"
+install -Dm 644 $HBB/res/fairdesk.desktop -t "%{buildroot}/usr/share/fairdesk/files"
+install -Dm 644 $HBB/res/fairdesk-link.desktop -t "%{buildroot}/usr/share/fairdesk/files"
+install -Dm 644 $HBB/res/128x128@2x.png "%{buildroot}/usr/share/fairdesk/files/fairdesk.png"
 
 %files
-/usr/lib/rustdesk/*
-/usr/share/rustdesk/files/rustdesk.service
-/usr/share/rustdesk/files/rustdesk.png
-/usr/share/rustdesk/files/rustdesk.desktop
-/usr/share/rustdesk/files/rustdesk-link.desktop
+/usr/lib/fairdesk/*
+/usr/share/fairdesk/files/fairdesk.service
+/usr/share/fairdesk/files/fairdesk.png
+/usr/share/fairdesk/files/fairdesk.desktop
+/usr/share/fairdesk/files/fairdesk-link.desktop
 
 %changelog
 # let's skip this for now
@@ -45,27 +45,27 @@ case "$1" in
   ;;
   2)
     # for upgrade
-    systemctl stop rustdesk || true
+    systemctl stop fairdesk || true
   ;;
 esac
 
 %post
-cp /usr/share/rustdesk/files/rustdesk.service /etc/systemd/system/rustdesk.service
-cp /usr/share/rustdesk/files/rustdesk.desktop /usr/share/applications/
-cp /usr/share/rustdesk/files/rustdesk-link.desktop /usr/share/applications/
-ln -s /usr/lib/rustdesk/rustdesk /usr/bin/rustdesk 
+cp /usr/share/fairdesk/files/fairdesk.service /etc/systemd/system/fairdesk.service
+cp /usr/share/fairdesk/files/fairdesk.desktop /usr/share/applications/
+cp /usr/share/fairdesk/files/fairdesk-link.desktop /usr/share/applications/
+ln -s /usr/lib/fairdesk/fairdesk /usr/bin/fairdesk 
 systemctl daemon-reload
-systemctl enable rustdesk
-systemctl start rustdesk
+systemctl enable fairdesk
+systemctl start fairdesk
 update-desktop-database
 
 %preun
 case "$1" in
   0)
     # for uninstall
-    systemctl stop rustdesk || true
-    systemctl disable rustdesk || true
-    rm /etc/systemd/system/rustdesk.service || true
+    systemctl stop fairdesk || true
+    systemctl disable fairdesk || true
+    rm /etc/systemd/system/fairdesk.service || true
   ;;
   1)
     # for upgrade
@@ -76,9 +76,9 @@ esac
 case "$1" in
   0)
     # for uninstall
-    rm /usr/share/applications/rustdesk.desktop || true
-    rm /usr/share/applications/rustdesk-link.desktop || true
-    rm /usr/bin/rustdesk || true
+    rm /usr/share/applications/fairdesk.desktop || true
+    rm /usr/share/applications/fairdesk-link.desktop || true
+    rm /usr/bin/fairdesk || true
     update-desktop-database
   ;;
   1)

@@ -1,12 +1,12 @@
 [Unit]
-Description=RustDesk
+Description=FairDesk
 Requires=network.target
 After=systemd-user-sessions.service
 
 [Service]
 Type=simple
-ExecStart=/usr/bin/rustdesk --service
-PIDFile=/run/rustdesk.pid
+ExecStart=/usr/bin/fairdesk --service
+PIDFile=/run/fairdesk.pid
 KillMode=mixed
 TimeoutStopSec=30
 User=root
