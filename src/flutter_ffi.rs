@@ -174,6 +174,12 @@ pub fn session_record_screen(session_id: SessionID, start: bool, width: usize, h
     }
 }
 
+pub fn session_record_status(session_id: SessionID, status: bool) {
+    if let Some(session) = SESSIONS.read().unwrap().get(&session_id) {
+        session.record_status(status);
+    }
+}
+
 pub fn session_reconnect(session_id: SessionID, force_relay: bool) {
     if let Some(session) = SESSIONS.read().unwrap().get(&session_id) {
         session.reconnect(force_relay);
@@ -631,8 +637,8 @@ pub fn main_get_default_sound_input() -> Option<String> {
     None
 }
 
-pub fn main_get_hostname() -> SyncReturn<String> {
-    SyncReturn(get_hostname())
+pub fn main_get_login_device_info() -> SyncReturn<String> {
+    SyncReturn(get_login_device_info_json())
 }
 
 pub fn main_change_id(new_id: String) {
@@ -798,6 +804,12 @@ pub fn main_get_peer_option(id: String, key: String) -> String {
 
 pub fn main_get_peer_option_sync(id: String, key: String) -> SyncReturn<String> {
     SyncReturn(get_peer_option(id, key))
+}
+
+// Sometimes we need to get the flutter config of a peer by reading the file.
+// Because the session may not be established yet.
+pub fn main_get_peer_flutter_config_sync(id: String, k: String) -> SyncReturn<String> {
+    SyncReturn(get_peer_flutter_config(id, k))
 }
 
 pub fn main_set_peer_option(id: String, key: String, value: String) {
