@@ -238,6 +238,13 @@ impl VideoRenderer {
 
         // It is also Ok to skip this check.
         if self.width != rgba.w || self.height != rgba.h {
+            log::error!(
+                "width/height mismatch: ({},{}) != ({},{})",
+                self.width,
+                self.height,
+                rgba.w,
+                rgba.h
+            );
             return;
         }
 

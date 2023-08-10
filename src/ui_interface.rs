@@ -3,9 +3,7 @@ use hbb_common::password_security;
 use hbb_common::{
     allow_err,
     config::{self, Config, LocalConfig, PeerConfig},
-    directories_next, log,
-    sodiumoxide::base64,
-    tokio,
+    directories_next, log, tokio,
 };
 use hbb_common::{
     bytes::Bytes,
@@ -44,6 +42,13 @@ pub struct UiStatus {
     pub mouse_time: i64,
     #[cfg(not(feature = "flutter"))]
     pub id: String,
+}
+
+#[derive(Debug, Clone, Serialize)]
+pub struct LoginDeviceInfo {
+    pub os: String,
+    pub r#type: String,
+    pub name: String,
 }
 
 lazy_static::lazy_static! {
@@ -201,6 +206,13 @@ pub fn forget_password(id: String) {
 pub fn get_peer_option(id: String, name: String) -> String {
     let c = PeerConfig::load(&id);
     c.options.get(&name).unwrap_or(&"".to_owned()).to_owned()
+}
+
+#[inline]
+#[cfg(feature = "flutter")]
+pub fn get_peer_flutter_config(id: String, name: String) -> String {
+    let c = PeerConfig::load(&id);
+    c.ui_flutter.get(&name).unwrap_or(&"".to_owned()).to_owned()
 }
 
 #[inline]
@@ -615,6 +627,7 @@ pub fn peer_to_map(id: String, p: PeerConfig) -> HashMap<&'static str, String> {
 
 #[cfg(feature = "flutter")]
 pub fn peer_to_map_ab(id: String, p: PeerConfig) -> HashMap<&'static str, String> {
+    use hbb_common::sodiumoxide::base64;
     let mut m = peer_to_map(id, p.clone());
     m.insert(
         "hash",
@@ -913,7 +926,7 @@ fn check_connect_status(reconnect: bool) -> mpsc::UnboundedSender<ipc::Data> {
 
 #[cfg(feature = "flutter")]
 pub fn account_auth(op: String, id: String, uuid: String, remember_me: bool) {
-    account::OidcSession::account_auth(op, id, uuid, remember_me);
+    account::OidcSession::account_auth(get_api_server(), op, id, uuid, remember_me);
 }
 
 #[cfg(feature = "flutter")]
@@ -951,6 +964,21 @@ pub fn get_fingerprint() -> String {
 
 pub fn get_hostname() -> String {
     crate::common::hostname()
+}
+
+#[inline]
+pub fn get_login_device_info() -> LoginDeviceInfo {
+    LoginDeviceInfo {
+        // std::env::consts::OS is better than whoami::platform() here.
+        os: std::env::consts::OS.to_owned(),
+        r#type: "client".to_owned(),
+        name: crate::common::hostname(),
+    }
+}
+
+#[inline]
+pub fn get_login_device_info_json() -> String {
+    serde_json::to_string(&get_login_device_info()).unwrap_or_default()
 }
 
 // notice: avoiding create ipc connection repeatedly,
