@@ -470,7 +470,7 @@ def main():
             return
         system2('cargo build --release --features ' + features)
         # system2('upx.exe target/release/fairdesk.exe')
-        system2('mv target/release/rustdesk.exe target/release/FairDesk.exe')
+        system2('mv target/release/fairdesk.exe target/release/FairDesk.exe')
         pa = os.environ.get('P')
         if pa:
             system2(
